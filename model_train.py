@@ -101,7 +101,9 @@ set(unique_listcols)
 X = df_train.drop('CASE_STATUS', axis=1)
 y = df_train.CASE_STATUS
 test_size = 0.20
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=1)
+X_train =X
+y_train =y
+#X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=1)
 #X_train.columns
 print("DATA SPLIT DONE")
 
@@ -121,16 +123,16 @@ dtree = dtree.fit(X_train, y_train)
 # In[14]:
 
 
-y_pred = dtree.predict(X_test)
-y_prob = dtree.predict_proba(X_test)
+#y_pred = dtree.predict(X_test)
+#y_prob = dtree.predict_proba(X_test)
 
 
 # In[15]:
 
 
 print("DTREE")
-print(metrics.confusion_matrix(y_test,y_pred))
-print(metrics.classification_report(y_test, y_pred))
+#print(metrics.confusion_matrix(y_test,y_pred))
+#print(metrics.classification_report(y_test, y_pred))
 
 
 # In[16]:
@@ -143,11 +145,11 @@ mlp.fit(X_train, y_train)
 # In[17]:
 
 
-y_pred_mlp = mlp.predict(X_test)
-confusion = metrics.confusion_matrix(y_test, y_pred_mlp)
+#y_pred_mlp = mlp.predict(X_test)
+#confusion = metrics.confusion_matrix(y_test, y_pred_mlp)
 print("MLP")
-print(confusion)
-print(metrics.classification_report(y_test, y_pred_mlp))
+#print(confusion)
+#print(metrics.classification_report(y_test, y_pred_mlp))
 
 
 # In[18]:
@@ -160,11 +162,11 @@ gaus_clf.fit(X_train, y_train)
 # In[19]:
 
 
-y_pred_glb = gaus_clf.predict(X_test)
-confusion = metrics.confusion_matrix(y_test, y_pred_glb)
+#y_pred_glb = gaus_clf.predict(X_test)
+#confusion = metrics.confusion_matrix(y_test, y_pred_glb)
 print("GUAS")
-print(confusion)
-print(metrics.classification_report(y_test, y_pred_glb))
+#print(confusion)
+#print(metrics.classification_report(y_test, y_pred_glb))
 
 """save model"""
 save_dtree=file_path+'DTREE_Model_h1b.sav'
