@@ -92,7 +92,7 @@ def parallelize_dataframe(df, func):
 
 # In[ ]:
 
-
+cnt=1
 def match_soc_code(soc_name_input) :
     soc_code_num=0o0 # 나중에 반환될값
     soc_name_series=pd.Series(str(soc_name_input).split(' ')) # 글자를 띄어쓰기 별로 구분해서 Series 화 시킨다
@@ -100,6 +100,11 @@ def match_soc_code(soc_name_input) :
     soc_result=np.array(list(filter(soc_find,soc_code_array)))#필터를 통해 아까 람다식이 참인 것들만 반환해 준다
     soc_code_list=[int(i[0])  for i in soc_result  ]#팔진수를 인티저 형으로 받아서 더해준다
     #soc_code_num=sum(soc_code_list)
+    global cnt
+    
+    if(cnt%1000) :
+        print (cnt)
+    cnt += 1
     if (len(soc_code_list)>=1) : # 카테고리화 되지 못한 항목은 0으로 유지 선택된 것은 맨앞에 1을 붙여주어 구별하기 편하게 한다.
         soc_code_num+=0o1000
         soc_code_list.sort(reverse=True)
@@ -115,8 +120,7 @@ def map_soc_code(data) :
     global num
     print("working process" ,num)
     num +=1
-    if(num%1000) :
-        print (num)
+
     data["SOC_CODE"]=data["SOC_NAME"].map(lambda x : match_soc_code(x))
     return data
 
