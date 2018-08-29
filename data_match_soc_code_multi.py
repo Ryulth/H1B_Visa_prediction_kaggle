@@ -101,7 +101,7 @@ def match_soc_code(soc_name_input) :
     soc_code_list=[int(i[0])  for i in soc_result  ]#팔진수를 인티저 형으로 받아서 더해준다
     #soc_code_num=sum(soc_code_list)
     global cnt
-    
+
     if(cnt%1000) :
         print (cnt)
     cnt += 1

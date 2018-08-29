@@ -73,6 +73,10 @@ def match_soc_name(employer_name,job_title,full_time_position):
     #cnt +=1
     #print (cnt)
     #print (type((employer_name)))
+    global cnt
+    if (cnt % 1000):
+        print(cnt)
+    cnt += 1
     train_groupby.loc[(train_groupby['EMPLOYER_NAME']==employer_name),'FREQUENCY'] +=4
     train_groupby.loc[(train_groupby['JOB_TITLE']==job_title),'FREQUENCY']+=2
     train_groupby.loc[(train_groupby['FULL_TIME_POSITION']==full_time_position),'FREQUENCY'] +=1
