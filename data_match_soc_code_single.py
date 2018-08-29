@@ -1,14 +1,14 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[5]:
 
 
 import pandas as pd
 import numpy as np
 
 
-# In[ ]:
+# In[6]:
 
 
 file_path='./datas/'
@@ -18,6 +18,12 @@ train=train.loc[(train['CASE_STATUS']=='CERTIFIED') | (train['CASE_STATUS']=='DE
 
 
 # In[ ]:
+
+
+train["ID"]=train.index
+
+
+# In[7]:
 
 
 def set_soc_code():
@@ -35,26 +41,41 @@ def set_soc_code():
     0o001 : LIVESTOCK
     """
     code_computer=np.array([0o400,'com','software','programmer','project',
-                   'developer','database','consultant', 'manager'])
+                   'developer','database','consultant', 'manager','graphic',
+                           'multimedia','animators','program'])
     code_medical=np.array([0o200,'medical','doctor','physic','dentist',
-                          'surgeon','nurse','psych','health'])
-    code_sci=np.array([0o100,'chemist','physicist','bio','scientist',
-              'clinical','math','statistic','predictive','stats'])
-    code_edu=np.array([0o40,'teach','linguist','professor','school','principal'])
-    code_manage=np.array([0o20,'relation','manage','operation','chief','plan','executive'])
-    code_bussiness=np.array([0o10,'advertis','marketing','business','research','promotion'])
-    code_tech=np.array([0o4,'techno','engineer','surveyor','carto',
-             'architect','drafter','information','security'])
-    code_finacial=np.array([0o2,'accountant','finan'])
-    code_livestock=np.array([0o1,'water','butcher'])
+                          'surgeon','nurse','psych','health','internists',
+                          'pharmacists','practitioners','therapist',
+                          'pediatricians','pathologist','veterinarians',
+                          'Chiropractor','Rehabilitation','Gynecologist',
+                          'Obstetrician','Anesthesiologist','OPTOMETRIST'])
+    code_tech=np.array([0o100,'techno','engineer','surveyor','carto','architect',
+                        'drafter','information','security','designers','machine',
+                       'tech','repairer','interpreters','EDITOR','Mechanic'])
+    code_edu=np.array([0o40,'teach','linguist','professor','school','principal','edu',
+                      'instructional'])
+    code_manage=np.array([0o20,'relation','manage','operation','chief','plan',
+                          'executive','resources','coache','training','lawyer',
+                         'legal','law','curator','Librarian','Recruiter'])
+    code_bussiness=np.array([0o10,'advertis','marketing','business','research',
+                             'promotion','logisticians','economist','auditor',
+                            'sale','retail'])
+    code_sci=np.array([0o4,'chemist','physicist','bio','scientist','Epidemiologist',
+              'clinical','math','statistic','predictive','stats','Astronomer'])
+    code_finacial=np.array([0o2,'accountant','finan','cost','estimators',
+                           'credit','actuaries','budget','accounting','Insurance '])
+    code_livestock=np.array([0o1,'water','butcher','fashion','scout',
+                            'art','interior','MILLWRIGHTS','gem','bartender',
+                            'shoe','directors','correspondents','model','food',
+                             'ship','author','REPORTER','chef','cook','Dietitian',
+                            'Athletic','Fitness'])
     code_list=[code_computer,code_medical,code_sci,code_edu,code_manage,
                code_bussiness,code_tech,code_finacial,code_livestock]
     soc_code_array= np.array(code_list)
     return soc_code_array
-soc_code_array=set_soc_code()
 
 
-# In[ ]:
+# In[8]:
 
 
 def match_soc_code(soc_name_input) :
@@ -63,8 +84,9 @@ def match_soc_code(soc_name_input) :
     soc_find=lambda x: soc_name_series[soc_name_series.str.contains('|'.join(x),case=False)].size>=1 # 람다식 함수 생성  or 를 join 으로 다 붙여준후에 contains 해주고 그게 크기를 구하는 함수
     soc_result=np.array(list(filter(soc_find,soc_code_array)))#필터를 통해 아까 람다식이 참인 것들만 반환해 준다
     soc_code_list=[int(i[0])  for i in soc_result  ]#팔진수를 인티저 형으로 받아서 더해준다
-    soc_code_num=sum(soc_cod
-                     e_list)
+    #soc_code_num=sum(soc_code_list)
+    soc_code_list.sort(reverse=True)
+    soc_code_num=soc_code_list[0]
     if (soc_code_num>=1) : # 카테고리화 되지 못한 항목은 0으로 유지 선택된 것은 맨앞에 1을 붙여주어 구별하기 편하게 한다.
         soc_code_num+=0o1000 
     return oct(soc_code_num) # 카테고리화 된 번호 반환

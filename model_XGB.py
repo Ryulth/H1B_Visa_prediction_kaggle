@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[30]:
+# In[1]:
 
 
 import pandas as pd
@@ -14,7 +14,7 @@ import re
 from xgboost import XGBClassifier
 
 
-# In[21]:
+# In[2]:
 
 
 file_path='./datas/'
@@ -23,37 +23,25 @@ df=pd.read_csv(file_name,keep_default_na=False)
 df.columns
 
 
-# In[22]:
+# In[3]:
 
 
 df[df.STATE.isna()]
 
 
-# In[53]:
+# In[4]:
 
 
 df
 
 
-# In[23]:
+# In[5]:
 
 
 df[['CASE_STATUS', 'FULL_TIME_POSITION', 'YEAR','SOC_CODE', 'STATE']]=df[['CASE_STATUS', 'FULL_TIME_POSITION', 'YEAR','SOC_CODE', 'STATE']].apply(lambda x : x.astype('category'))
 
 
-# In[24]:
-
-
-df.info()
-
-
-# In[26]:
-
-
-df
-
-
-# In[34]:
+# In[8]:
 
 
 X = df.drop('CASE_STATUS', axis=1)
@@ -64,64 +52,64 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, r
 X_train.columns
 
 
-# In[36]:
+# In[9]:
 
 
 X_train_encode = pd.get_dummies(X_train)
 X_test_encode = pd.get_dummies(X_test)
 
 
-# In[38]:
+# In[10]:
 
 
 train_X = X_train_encode.as_matrix()
 train_y = y_train.as_matrix()
 
 
-# In[39]:
+# In[11]:
 
 
 gbm=XGBClassifier(max_features='sqrt', subsample=0.8, random_state=10)
 
 
-# In[40]:
+# In[12]:
 
 
 from sklearn.model_selection import GridSearchCV
 
 
-# In[41]:
+# In[13]:
 
 
 parameters = [{'n_estimators': [10, 100]},
               {'learning_rate': [0.1, 0.01, 0.5]}]
 
 
-# In[42]:
+# In[14]:
 
 
 grid_search = GridSearchCV(estimator = gbm, param_grid = parameters, scoring='accuracy', cv = 3, n_jobs=-1)
 
 
-# In[43]:
+# In[15]:
 
 
 grid_search = grid_search.fit(train_X, train_y)
 
 
-# In[47]:
+# In[16]:
 
 
 grid_search.grid_scores_, grid_search.best_params_, grid_search.best_score_
 
 
-# In[48]:
+# In[17]:
 
 
 grid_search.best_estimator_
 
 
-# In[49]:
+# In[18]:
 
 
 gbm=XGBClassifier(base_score=0.5, booster='gbtree', colsample_bylevel=1,
@@ -133,13 +121,13 @@ gbm=XGBClassifier(base_score=0.5, booster='gbtree', colsample_bylevel=1,
        subsample=0.8).fit(train_X, train_y)
 
 
-# In[51]:
+# In[19]:
 
 
 y_pred = gbm.predict(X_test_encode.as_matrix())
 
 
-# In[52]:
+# In[20]:
 
 
 print(confusion_matrix(y_test, y_pred))

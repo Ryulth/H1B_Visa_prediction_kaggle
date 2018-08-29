@@ -15,10 +15,10 @@ num_cores = cpu_count()
 
 
 file_path='./datas/'
-file_name=file_path+"h1b_train.csv"
+file_name=file_path+"h1b_dev.csv"
 train_data=pd.read_csv(file_name)
 train_data=train_data.loc[(train_data['CASE_STATUS']=='CERTIFIED') | (train_data['CASE_STATUS']=='DENIED')]
-
+train_data["ID"]=train_data.index
 
 # In[ ]:
 
@@ -34,14 +34,14 @@ def init_train_groupby () :
 
 train_data_soc_na=train_data[train_data.SOC_NAME.isna()]
 train_data_soc_not_na=train_data.dropna(subset=['SOC_NAME'])
-train_data_soc_na
+#train_data_soc_na
 
 
 # In[ ]:
 
 
 train_groupby=init_train_groupby()
-train_groupby
+#train_groupby
 
 
 # In[ ]:
@@ -95,44 +95,38 @@ if __name__ == '__main__':
     start_time = time.time() 
     train_data_soc_fill_na=parallelize_dataframe(train_data_soc_na, apply_soc_name)
     end_time = time.time()
+    task1 = end_time - start_time
+    now = time.gmtime(task1)
+    print(now.tm_hour, now.tm_min, now.tm_sec)
+
+    soc_fillna_data = pd.concat([train_data_soc_not_na, train_data_soc_fill_na])
+
+    # In[ ]:
+
+    soc_fillna_data.sort_index(inplace=True)
+    #soc_fillna_data
+
+    # In[ ]:
+
+    save_file = file_path + 'h1b_dev_fillna_soc_data.csv'
+    soc_fillna_data.to_csv(save_file, index=False)
+# In[ ]:
+
+
 
 
 # In[ ]:
 
 
-task1=end_time-start_time
-task1
 
 
 # In[ ]:
 
 
-now = time.gmtime(task1)
-now.tm_hour, now.tm_min, now.tm_sec
+#train_data_soc_fill_na
 
 
 # In[ ]:
 
 
-train_data_soc_fill_na
-
-
-# In[ ]:
-
-
-soc_fillna_data = pd.concat([train_data_soc_not_na,train_data_soc_fill_na])
-
-
-# In[ ]:
-
-
-soc_fillna_data.sort_index(inplace=True)
-soc_fillna_data
-
-
-# In[ ]:
-
-
-save_file=file_path+'h1b_train_fillna_soc_data.csv'
-soc_fillna_data.to_csv(save_file,index=False)
 

@@ -1,18 +1,18 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[2]:
 
 
 import pandas as pd
 import numpy as np
 
 
-# In[2]:
+# In[3]:
 
 
 file_path='./datas/'
-file_name=file_path+"h1b_test_match_soc_code.csv"
+file_name=file_path+"h1b_dev_match_soc_code.csv"
 df=pd.read_csv(file_name)
 #train_data=train_data.loc[(train_data['CASE_STATUS']=='CERTIFIED') | (train_data['CASE_STATUS']=='DENIED')]
 
@@ -38,7 +38,7 @@ def wage_categorization(wage):
 # In[4]:
 
 
-#df.loc[1572]
+df[df["WORKSITE"].str.contains('YORK')]
 
 
 # In[5]:
@@ -57,9 +57,9 @@ df['PREVAILING_WAGE']=df['PREVAILING_WAGE'].fillna(-100)
 # In[7]:
 
 
-#case_mapping = {'CERTIFIED':0, 'DENIED':1}
+case_mapping = {'CERTIFIED':0, 'DENIED':1}
 fp_mapping = {"N" :0,"Y" : 1}
-#df["CASE_STATUS"] = df["CASE_STATUS"].map(case_mapping)
+df["CASE_STATUS"] = df["CASE_STATUS"].map(case_mapping)
 df["FULL_TIME_POSITION"]=df["FULL_TIME_POSITION"].map(fp_mapping)
 
 
@@ -72,9 +72,9 @@ df["YEAR"]=df["YEAR"].astype('int')
 # In[9]:
 
 
-#df[df["SOC_CODE"]=="0o0"]
+df[df["SOC_CODE"]=="0o0"]
 
-#In
+
 # In[10]:
 
 
@@ -103,11 +103,12 @@ df=df.drop('PREVAILING_WAGE',axis=1)
 # In[14]:
 
 
-save_file=file_path+'h1b_test_preprocessing.csv'
+save_file=file_path+'h1b_dev_preprocessing.csv'
 df.to_csv(save_file,index=False)
 
 
 # In[15]:
 
 
+df
 
