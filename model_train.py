@@ -22,9 +22,11 @@ import sklearn.metrics as metrics
 
 
 file_path='./datas/'
-file_name=file_path+"h1b_dev_preprocessing.csv"
+file_name=file_path+"h1b_train_final_data_ry.csv"
 df=pd.read_csv(file_name,keep_default_na=False)
-df.columns
+from sklearn.externals import joblib
+
+#df.columns
 
 
 # In[3]:
@@ -49,7 +51,7 @@ df["CASE_STATUS"].value_counts()
 
 
 Input_Certified, Input_Certified_extra, y_certified, y_certified_extra = train_test_split(df[df.CASE_STATUS == 0],
-                                                                                          df_certified.CASE_STATUS, train_size= 0.06, random_state=1)
+                                                                                          df_certified.CASE_STATUS, train_size= 0.4, random_state=1)
 
 
 # In[6]:
@@ -67,25 +69,25 @@ df_train.CASE_STATUS.value_counts()
 # In[8]:
 
 
-df_train=pd.get_dummies(df_train,columns=['YEAR', 'SOC_CODE', 'STATE',
-       'WAGE_CATEGORY'])
+df_train=pd.get_dummies(df_train,columns=['YEAR', 'SOC_CODE', 'STATE'])
 
 
 # In[20]:
 
 
-df_train
+#df_train
 
 
 # In[11]:
-
-
-X = df_train.drop('CASE_STATUS', axis=1)
-y = df_train.CASE_STATUS
+X_train = df_train.drop('CASE_STATUS', axis=1)
+y_train = df_train.CASE_STATUS
+X_train=X_train.drop('ID',axis=1)
+X_train=X_train.drop("PREVAILING_WAGE",axis=1)
+'''
 test_size = 0.20
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=1)
-X_train.columns
-
+#X_train.columns
+'''
 
 # In[12]:
 
@@ -103,18 +105,6 @@ dtree = dtree.fit(X_train, y_train)
 # In[14]:
 
 
-y_pred = dtree.predict(X_test)
-y_prob = dtree.predict_proba(X_test)
-
-
-# In[22]:
-
-
-print("test", y_test[:10])
-print("pred", y_pred[:10])
-print(metrics.confusion_matrix(y_test,y_pred))
-print(metrics.classification_report(y_test, y_pred))
-
 
 # In[16]:
 
@@ -126,10 +116,6 @@ mlp.fit(X_train, y_train)
 # In[23]:
 
 
-y_pred_mlp = mlp.predict(X_test)
-confusion = metrics.confusion_matrix(y_test, y_pred_mlp)
-print(confusion)
-print(metrics.classification_report(y_test, y_pred_mlp))
 
 
 # In[18]:
@@ -142,35 +128,24 @@ gaus_clf.fit(X_train, y_train)
 # In[19]:
 
 
-y_pred_glb = gaus_clf.predict(X_test)
-confusion = metrics.confusion_matrix(y_test, y_pred_glb)
-print(confusion)
-print(metrics.classification_report(y_test, y_pred_glb))
 
 
 # In[21]:
 
 
-import pickle
+
+type="train2_"
+save_dtree=file_path+type+'DTREE_Model_h1b'
+save_mlp=file_path+type+'MLP_Model_h1b'
+save_gaus=file_path+type+'GAUS_Model_h1b'
 
 
-# In[31]:
+# In[22]:
 
 
-save_dtree=file_path+'DTREE_Model_h1b.sav'
-pickle.dump(dtree, open(save_dtree, 'wb'))
-
-
-# In[29]:
-
-
-save_mlp=file_path+'MLP_Model_h1b.sav'
-pickle.dump(dtree, open(save_mlp, 'wb'))
-
-
-# In[30]:
-
-
-save_gaus=file_path+'GAUS_Model_h1b.sav'
-pickle.dump(dtree, open(save_gaus, 'wb'))
-
+joblib.dump(dtree, save_dtree)
+print("done")
+joblib.dump(mlp, save_mlp)
+print("done")
+joblib.dump(gaus_clf, save_gaus)
+print("done")

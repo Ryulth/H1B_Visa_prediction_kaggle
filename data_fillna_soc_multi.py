@@ -15,7 +15,7 @@ num_cores = cpu_count()
 
 
 file_path='./datas/'
-file_name=file_path+"h1b_dev.csv"
+file_name=file_path+"h1b_train.csv"
 train_data=pd.read_csv(file_name)
 train_data=train_data.loc[(train_data['CASE_STATUS']=='CERTIFIED') | (train_data['CASE_STATUS']=='DENIED')]
 train_data["ID"]=train_data.index
@@ -74,7 +74,7 @@ def match_soc_name(employer_name,job_title,full_time_position):
     #print (cnt)
     #print (type((employer_name)))
     global cnt
-    if (cnt % 1000):
+    if (cnt % 1000==0):
         print(cnt)
     cnt += 1
     train_groupby.loc[(train_groupby['EMPLOYER_NAME']==employer_name),'FREQUENCY'] +=4
@@ -112,7 +112,7 @@ if __name__ == '__main__':
 
     # In[ ]:
 
-    save_file = file_path + 'h1b_dev_fillna_soc_data.csv'
+    save_file = file_path + 'h1b_train_fillna_soc_data.csv'
     soc_fillna_data.to_csv(save_file, index=False)
 # In[ ]:
 

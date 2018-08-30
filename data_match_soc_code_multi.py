@@ -15,7 +15,7 @@ num_cores = cpu_count()
 
 
 file_path='./datas/'
-file_name=file_path+"h1b_dev_fillna_soc_data.csv"
+file_name=file_path+"h1b_train_fillna_soc_data.csv"
 train_data=pd.read_csv(file_name)
 #train_data=train_data.loc[(train_data['CASE_STATUS']=='CERTIFIED') | (train_data['CASE_STATUS']=='DENIED')]
 
@@ -102,7 +102,7 @@ def match_soc_code(soc_name_input) :
     #soc_code_num=sum(soc_code_list)
     global cnt
 
-    if(cnt%1000) :
+    if(cnt%1000==0) :
         print (cnt)
     cnt += 1
     if (len(soc_code_list)>=1) : # 카테고리화 되지 못한 항목은 0으로 유지 선택된 것은 맨앞에 1을 붙여주어 구별하기 편하게 한다.
@@ -135,7 +135,7 @@ if __name__ == '__main__':
     task1=end_time-start_time
     now = time.gmtime(task1)
     print(now.tm_hour, now.tm_min, now.tm_sec)
-    save_file = file_path + 'h1b_dev_match_soc_code.csv'
+    save_file = file_path + 'h1b_train_match_soc_code.csv'
     train_data_match_soc_code.to_csv(save_file, index=False)
 
 # In[ ]:
